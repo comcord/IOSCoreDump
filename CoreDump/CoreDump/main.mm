@@ -470,7 +470,7 @@ bool WriteCoreFileWithRegions(const char* path, mach_port_t task) {
 
         thread_command cmd = {};
         cmd.cmd = LC_THREAD;
-        cmd.cmdsize = sizeof(cmd) + sizeof(uint32_t) * 2 + sizeof(tstate);
+        cmd.cmdsize = sizeof(cmd) + sizeof(uint32_t) * 2 + sizeof(tstate); //
 
         std::vector<uint8_t> data(cmd.cmdsize);
         size_t offset = 0;
@@ -533,7 +533,7 @@ bool WriteCoreFileWithRegions(const char* path, mach_port_t task) {
 
     uint32_t ncmds = static_cast<uint32_t>(lc_threads.size() + regions.size() + lc_note_count); // LC_NOTE x3
     uint32_t sizeofcmds = 0;
-    for (auto& t : lc_threads) sizeofcmds += static_cast<uint32_t>(t.size()) ;
+    for (auto& t : lc_threads) sizeofcmds += static_cast<uint32_t>(t.size()) ; // thead commond
     sizeofcmds += static_cast<uint32_t>(regions.size() * sizeof(segment_command_64));
     sizeofcmds += lc_note_count * sizeof(lc_note_command); // approx note size
     printf("ssizeofcmds %u\n",sizeofcmds);
@@ -678,15 +678,7 @@ int main() {
         // 模拟崩溃：非法访问地址
         volatile int* crash_ptr = reinterpret_cast<int*>(0xDEAD1337);
         *crash_ptr = 42; // 触发 SIGSEGV
-    // 获取当前进程的 task port
-//    mach_port_t task = mach_task_self();
-//    
-//    // 调用你实现的 core dump 函数
-//    //  WriteCoreFileWithRegions("/Users/tingfudu/Desktop/dump/crash.core", task);
-//    std::vector<mach_vm_address_t> dirty_pages = get_dirty_pages(task, 1000, vm_page_size);
-//    for (auto addr : dirty_pages) {
-//        printf("Dirty page: 0x%llx\n", addr);
-//    }
+
     return 0;
 }
 
